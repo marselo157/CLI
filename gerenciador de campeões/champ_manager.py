@@ -1,9 +1,13 @@
+# Sistema de gerenciamento de campeões do League of Legends (CLI)
 from typing import Dict, Tuple, Set
+import random
 
+# Lista principal de campeões
 campeoes = []
 
+# Função para criar um campeão
 def criar_campeao() -> Dict:
-    print("=== Cadastro de Campeão ===")
+    print("\n=== Cadastro de Campeão ===")
     nome = input("Nome do campeão: ").strip().title()
     funcao = input("Função (Ex: Mago, Lutador, Assassino): ").strip().title()
     tipo_dano = input("Tipo de dano (Físico/Mágico/Misto): ").strip().title()
@@ -28,8 +32,9 @@ def criar_campeao() -> Dict:
     campeoes.append(campeao)
     print(f"Campeão {nome} cadastrado com sucesso!")
 
+# Função para associar uma região a um campeão
 def associar_regiao():
-    print("=== Associação de Região ao Campeão ===")
+    print("\n=== Associação de Região ao Campeão ===")
 
     if not campeoes:
         print("Nenhum campeão cadastrado.")
@@ -53,8 +58,9 @@ def associar_regiao():
 
     print(f"Região '{regiao}' associada com sucesso ao campeão {campeoes[escolha]['nome']}.")
 
+# Função para listar os campeões cadastrados
 def listar_campeoes():
-    print("=== Campeões Cadastrados ===")
+    print("\n=== Campeões Cadastrados ===")
     if not campeoes:
         print("Nenhum campeão cadastrado.")
         return
@@ -72,15 +78,110 @@ def listar_campeoes():
         print(f"  Região: {regiao}")
         print(f"  Habilidades: {habilidades}")
 
+# Estrutura de lista encadeada simples para a fila de combate
+class No:
+    def __init__(self, campeao):
+        self.campeao = campeao
+        self.proximo = None
+
+class FilaCombate:
+    def __init__(self):
+        self.inicio = None
+        self.fim = None
+
+    def esta_vazia(self):
+        return self.inicio is None
+
+    def enfileirar(self, campeao):
+        novo_no = No(campeao)
+        if self.esta_vazia():
+            self.inicio = novo_no
+            self.fim = novo_no
+        else:
+            self.fim.proximo = novo_no
+            self.fim = novo_no
+
+    def desenfileirar(self):
+        if self.esta_vazia():
+            return None
+        campeao = self.inicio.campeao
+        self.inicio = self.inicio.proximo
+        if self.inicio is None:
+            self.fim = None
+        return campeao
+
+    def mostrar_fila(self):
+        atual = self.inicio
+        i = 1
+        print("\n=== Fila de Combate ===")
+        if self.esta_vazia():
+            print("Fila vazia.")
+            return
+        while atual:
+            print(f"{i}. {atual.campeao['nome']}")
+            atual = atual.proximo
+            i += 1
+
+# Instância global da fila de combate
+fila_combate = FilaCombate()
+
+# Adiciona um campeão à fila de combate
+def adicionar_a_fila():
+    print("\n=== Adicionar à Fila de Combate ===")
+    if not campeoes:
+        print("Nenhum campeão cadastrado.")
+        return
+
+    print("Campeões disponíveis:")
+    for i, campeao in enumerate(campeoes):
+        print(f"{i + 1}. {campeao['nome']}")
+
+    try:
+        escolha = int(input("Escolha o número do campeão para entrar na fila: ")) - 1
+        if escolha < 0 or escolha >= len(campeoes):
+            print("Escolha inválida.")
+            return
+    except ValueError:
+        print("Entrada inválida.")
+        return
+
+    fila_combate.enfileirar(campeoes[escolha])
+    print(f"{campeoes[escolha]['nome']} foi adicionado à fila de combate!")
+
+# Inicia um confronto entre os dois primeiros campeões da fila
+def iniciar_confronto():
+    print("\n=== Iniciar Confronto ===")
+    if fila_combate.esta_vazia():
+        print("Fila de combate vazia.")
+        return
+
+    c1 = fila_combate.desenfileirar()
+    c2 = fila_combate.desenfileirar()
+
+    if not c2:
+        print(f"Aguardando mais um campeão para o confronto. {c1['nome']} continua na fila.")
+        fila_combate.enfileirar(c1)
+        return
+
+    vencedor = random.choice([c1, c2])
+    perdedor = c1 if vencedor == c2 else c2
+
+    print(f"Confronto: {c1['nome']} VS {c2['nome']}")
+    print(f"Vencedor: {vencedor['nome']}")
+
+# Menu principal do sistema
 def main():
     while True:
-        print("\nEscolha uma opção:")
+        print("\n=== Menu Principal ===")
         print("1. Cadastrar um campeão")
-        print("2. Listar campeões e associar região")
+        print("2. Associar região a um campeão")
         print("3. Ver todos os campeões cadastrados")
-        print("4. Sair")
+        print("4. Adicionar à fila de combate")
+        print("5. Iniciar próximo confronto")
+        print("6. Ver fila de combate atual")
+        print("7. Sair")
 
-        opcao = input("Escolha uma opção (1/2/3/4): ").strip()
+        opcao = input("Escolha uma opção (1-7): ").strip()
 
         if opcao == "1":
             criar_campeao()
@@ -89,6 +190,12 @@ def main():
         elif opcao == "3":
             listar_campeoes()
         elif opcao == "4":
+            adicionar_a_fila()
+        elif opcao == "5":
+            iniciar_confronto()
+        elif opcao == "6":
+            fila_combate.mostrar_fila()
+        elif opcao == "7":
             print("Saindo...")
             break
         else:
