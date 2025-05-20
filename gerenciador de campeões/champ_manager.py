@@ -78,12 +78,14 @@ def listar_campeoes():
         print(f"  Região: {regiao}")
         print(f"  Habilidades: {habilidades}")
 
-# Estrutura de lista encadeada simples para a fila de combate
-class No:
+# Nó da lista duplamente encadeada
+class NoDuplo:
     def __init__(self, campeao):
         self.campeao = campeao
+        self.anterior = None
         self.proximo = None
 
+# Lista duplamente encadeada usada como fila de combate
 class FilaCombate:
     def __init__(self):
         self.inicio = None
@@ -93,12 +95,12 @@ class FilaCombate:
         return self.inicio is None
 
     def enfileirar(self, campeao):
-        novo_no = No(campeao)
+        novo_no = NoDuplo(campeao)
         if self.esta_vazia():
-            self.inicio = novo_no
-            self.fim = novo_no
+            self.inicio = self.fim = novo_no
         else:
             self.fim.proximo = novo_no
+            novo_no.anterior = self.fim
             self.fim = novo_no
 
     def desenfileirar(self):
@@ -106,7 +108,9 @@ class FilaCombate:
             return None
         campeao = self.inicio.campeao
         self.inicio = self.inicio.proximo
-        if self.inicio is None:
+        if self.inicio:
+            self.inicio.anterior = None
+        else:
             self.fim = None
         return campeao
 
@@ -121,6 +125,31 @@ class FilaCombate:
             print(f"{i}. {atual.campeao['nome']}")
             atual = atual.proximo
             i += 1
+
+    def remover_por_nome(self, nome):
+        atual = self.inicio
+        while atual:
+            if atual.campeao["nome"].lower() == nome.lower():
+                if atual.anterior:
+                    atual.anterior.proximo = atual.proximo
+                else:
+                    self.inicio = atual.proximo
+                if atual.proximo:
+                    atual.proximo.anterior = atual.anterior
+                else:
+                    self.fim = atual.anterior
+                print(f"Campeão '{nome}' removido da fila.")
+                return
+            atual = atual.proximo
+        print(f"Campeão '{nome}' não encontrado na fila.")
+
+    def esta_na_fila(self, campeao):
+        atual = self.inicio
+        while atual:
+            if atual.campeao["id"] == campeao["id"]:
+                return True
+            atual = atual.proximo
+        return False
 
 # Instância global da fila de combate
 fila_combate = FilaCombate()
@@ -145,8 +174,12 @@ def adicionar_a_fila():
         print("Entrada inválida.")
         return
 
-    fila_combate.enfileirar(campeoes[escolha])
-    print(f"{campeoes[escolha]['nome']} foi adicionado à fila de combate!")
+    campeao_escolhido = campeoes[escolha]
+    if fila_combate.esta_na_fila(campeao_escolhido):
+        print(f"O campeão '{campeao_escolhido['nome']}' já está na fila de combate.")
+    else:
+        fila_combate.enfileirar(campeao_escolhido)
+        print(f"{campeao_escolhido['nome']} foi adicionado à fila de combate!")
 
 # Inicia um confronto entre os dois primeiros campeões da fila
 def iniciar_confronto():
@@ -169,6 +202,16 @@ def iniciar_confronto():
     print(f"Confronto: {c1['nome']} VS {c2['nome']}")
     print(f"Vencedor: {vencedor['nome']}")
 
+# Remove um campeão da fila de combate pelo nome
+def remover_da_fila():
+    print("\n=== Remover Campeão da Fila ===")
+    while True:
+        nome = input("Digite o nome do campeão a remover da fila: ").strip()
+        if nome:
+            break
+        print("O nome tem que ser informado. Tente novamente.")
+    fila_combate.remover_por_nome(nome)
+
 # Menu principal do sistema
 def main():
     while True:
@@ -179,9 +222,10 @@ def main():
         print("4. Adicionar à fila de combate")
         print("5. Iniciar próximo confronto")
         print("6. Ver fila de combate atual")
-        print("7. Sair")
+        print("7. Remover campeão da fila")
+        print("8. Sair")
 
-        opcao = input("Escolha uma opção (1-7): ").strip()
+        opcao = input("Escolha uma opção (1-8): ").strip()
 
         if opcao == "1":
             criar_campeao()
@@ -196,6 +240,8 @@ def main():
         elif opcao == "6":
             fila_combate.mostrar_fila()
         elif opcao == "7":
+            remover_da_fila()
+        elif opcao == "8":
             print("Saindo...")
             break
         else:
