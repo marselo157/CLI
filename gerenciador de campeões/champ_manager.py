@@ -5,32 +5,58 @@ import random
 # Lista principal de campeões
 campeoes = []
 
-# Função para criar um campeão
+# Função para criar um campeão (atualizada com validações e ID único)
 def criar_campeao() -> Dict:
     print("\n=== Cadastro de Campeão ===")
-    nome = input("Nome do campeão: ").strip().title()
-    funcao = input("Função (Ex: Mago, Lutador, Assassino): ").strip().title()
-    tipo_dano = input("Tipo de dano (Físico/Mágico/Misto): ").strip().title()
+    
+    while True:
+        nome = input("Nome do campeão: ").strip().title()
+        if not nome:
+            print("Nome não pode ficar vazio. Tente novamente.")
+            continue
+        if any(c['nome'].lower() == nome.lower() for c in campeoes):
+            print("Já existe um campeão com esse nome. Tente outro.")
+            continue
+        break
 
-    atributos_fixos: Tuple[str, str] = (funcao, tipo_dano)
+    while True:
+        funcao = input("Função (Ex: Mago, Lutador, Assassino): ").strip().title()
+        if funcao:
+            break
+        print("Função não pode ficar vazia.")
 
-    habilidades: Set[str] = set()
+    tipos_validos = {"Fisico", "Mágico", "Misto"}
+    while True:
+        tipo_dano = input("Tipo de dano (Físico/Mágico/Misto): ").strip().title()
+        if tipo_dano in tipos_validos:
+            break
+        print("Tipo de dano inválido. Escolha entre Físico, Mágico ou Misto.")
+
+    habilidades = set()
     while True:
         habilidade = input("Adicione uma habilidade (ou pressione Enter para sair): ").strip()
         if habilidade == "":
             break
         habilidades.add(habilidade.title())
 
-    campeao: Dict = {
+    # Gerar ID único baseado no nome, adicionando número se necessário
+    base_id = nome.lower().replace(" ", "_")
+    novo_id = base_id
+    contador = 1
+    while any(c['id'] == novo_id for c in campeoes):
+        novo_id = f"{base_id}_{contador}"
+        contador += 1
+
+    campeao = {
         "nome": nome,
-        "atributos": atributos_fixos,
+        "atributos": (funcao, tipo_dano),
         "habilidades": habilidades,
         "regiao": None,
-        "id": nome.lower().replace(" ", "_")
+        "id": novo_id
     }
 
     campeoes.append(campeao)
-    print(f"Campeão {nome} cadastrado com sucesso!")
+    print(f"Campeão {nome} cadastrado com sucesso! ID: {novo_id}")
 
 # Função para associar uma região a um campeão
 def associar_regiao():
