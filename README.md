@@ -162,18 +162,6 @@ def main():
 
 ---
 
-## Justificativa da Escolha de Estruturas de Dados
-
-- **Lista**: Utilizada para armazenar os campeões cadastrados. A lista permite fácil adição e iteração sobre os campeões, o que é ideal para o cadastro e listagem.
-
-- **Dicionário**: Cada campeão é representado como um dicionário, onde as chaves são os atributos do campeão (nome, atributos, habilidades, região, id). Isso permite acesso rápido e intuitivo às informações de cada campeão.
-
-- **Conjunto (Set)**: As habilidades de cada campeão são armazenadas em um conjunto para evitar duplicatas e permitir operações eficientes de adição e verificação.
-
-- **Lista Duplamente Encadeada**: A fila de combate é implementada como uma lista duplamente encadeada, permitindo operações eficientes de enfileiramento e desenfileiramento. Isso é crucial para a dinâmica de confrontos, onde os campeões precisam ser removidos da fila de forma eficiente.
-
----
-
 ## Conclusão
 
 Este sistema de gerenciamento de campeões é uma ferramenta útil para jogadores e entusiastas de League of Legends, permitindo uma melhor organização e interação com os campeões do jogo. A implementação em Python e a escolha cuidadosa das estruturas de dados garantem eficiência e facilidade de uso.
@@ -191,18 +179,6 @@ O sistema é uma aplicação de linha de comando (CLI) que permite ao usuário i
 - **Fila de Combate**: Os campeões podem ser adicionados a uma fila de combate, onde dois campeões são selecionados aleatoriamente para um confronto. O vencedor é escolhido aleatoriamente entre os dois.
 
 - **Remoção de Campeões da Fila**: O usuário pode remover um campeão da fila de combate pelo nome, permitindo uma gestão dinâmica da fila.
-
----
-
-## Justificativa da Escolha de Estruturas de Dados
-
-- **Lista**: Utilizada para armazenar os campeões cadastrados. A lista permite fácil adição e iteração sobre os campeões, o que é ideal para o cadastro e listagem.
-
-- **Dicionário**: Cada campeão é representado como um dicionário, onde as chaves são os atributos do campeão (nome, atributos, habilidades, região, id). Isso permite acesso rápido e intuitivo às informações de cada campeão.
-
-- **Conjunto (Set)**: As habilidades de cada campeão são armazenadas em um conjunto para evitar duplicatas e permitir operações eficientes de adição e verificação.
-
-- **Lista Duplamente Encadeada**: A fila de combate é implementada como uma lista duplamente encadeada, permitindo operações eficientes de enfileiramento e desenfileiramento. Isso é crucial para a dinâmica de confrontos, onde os campeões precisam ser removidos da fila de forma eficiente.
 
 ---
 
