@@ -165,23 +165,3 @@ def main():
 ## Conclusão
 
 Este sistema de gerenciamento de campeões é uma ferramenta útil para jogadores e entusiastas de League of Legends, permitindo uma melhor organização e interação com os campeões do jogo. A implementação em Python e a escolha cuidadosa das estruturas de dados garantem eficiência e facilidade de uso.
-
-## Explicação do Sistema
-
-O sistema é uma aplicação de linha de comando (CLI) que permite ao usuário interagir com um conjunto de campeões do jogo League of Legends. As principais funções do sistema são:
-
-- **Cadastro de Campeões**: O usuário pode inserir informações sobre um novo campeão, incluindo nome, função, tipo de dano e habilidades. Essas informações são armazenadas em uma lista de dicionários.
-
-- **Associação de Região**: O sistema permite que o usuário associe uma região a um campeão já cadastrado, facilitando a organização dos campeões por suas respectivas regiões.
-
-- **Listagem de Campeões**: O usuário pode visualizar todos os campeões cadastrados, incluindo suas habilidades e regiões associadas.
-
-- **Fila de Combate**: Os campeões podem ser adicionados a uma fila de combate, onde dois campeões são selecionados aleatoriamente para um confronto. O vencedor é escolhido aleatoriamente entre os dois.
-
-- **Remoção de Campeões da Fila**: O usuário pode remover um campeão da fila de combate pelo nome, permitindo uma gestão dinâmica da fila.
-
----
-
-## Conclusão
-
-Este sistema de gerenciamento de campeões é uma ferramenta útil para jogadores e entusiastas de League of Legends, permitindo uma melhor organização e interação com os campeões do jogo. A implementação em Python e a escolha cuidadosa das estruturas de dados garantem eficiência e facilidade de uso.
